@@ -7,7 +7,9 @@ import {isTungaDomain} from '../utils/router';
 
 import ChatWindow from '../containers/ChatWindow';
 
-export default class ShowcaseContainer extends React.Component {
+import connect from '../utils/connectors/AuthConnector';
+
+class ShowcaseContainer extends React.Component {
 
   componentDidMount() {
 
@@ -16,7 +18,7 @@ export default class ShowcaseContainer extends React.Component {
       if(windowWidth >= 992) {
         if($(document).scrollTop() >= 20) {
           $('.navbar').removeClass('navbar-glass');
-        } else {
+        } else if(!__PRODUCTION__) {
           $('.navbar').addClass('navbar-glass');
         }
       }
@@ -33,6 +35,7 @@ export default class ShowcaseContainer extends React.Component {
       /^\/tunga((\/|\?).*)?/gi.test(window.location.pathname)
         ? '/tunga'
         : '';
+    const {Auth} = this.props;
 
     return (
       <div className={'showcase ' + this.props.className}>
@@ -74,7 +77,7 @@ export default class ShowcaseContainer extends React.Component {
               </div>
             : null}
           <Affix affixClassName="navbar-fixed-top" offsetTop={60}>
-            <nav className={`navbar navbar-fixed-top ${__PRODUCTION__?'navbar-glass':''}`}>
+            <nav className={`navbar navbar-fixed-top ${__PRODUCTION__?'':'navbar-glass'}`}>
               <div className="navbar-header">
                 <button
                   type="button"
@@ -92,52 +95,64 @@ export default class ShowcaseContainer extends React.Component {
               </div>
 
               <div id="navbar" className="collapse navbar-collapse">
-                <ul className="nav navbar-nav navbar-right nav-actions">
-                  <li className="schedule">
-                    <a
-                      className="primary"
-                      onClick={() => {
+                {Auth.isAuthenticated?(
+                  <ul className="nav navbar-nav navbar-right nav-actions">
+                    <li>
+                      <Link to="/home" className="primary" activeClassName="active">
+                        Back to Tunga
+                      </Link>
+                    </li>
+                  </ul>
+                ):(
+                  <ul className="nav navbar-nav navbar-right nav-actions">
+                    <li className="schedule">
+                      <a
+                        className="primary"
+                        onClick={() => {
                         openCalendlyWidget();
                       }}>
-                      Schedule call
-                    </a>
-                  </li>
-                  <li className="launch">
-                    <Link className="primary" to="/start/">
-                      <i className="tunga-icon-rocket fa-lg" /> Start your
-                      project
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/signin" activeClassName="active">
-                      Login
-                    </Link>
-                  </li>
-                </ul>
-                <ul className="nav navbar-nav navbar-left nav-main">
-                  <li>
-                    <Link
-                      to={`${pathPrefix}/our-story`}
-                      activeClassName="active">
-                      Our Story
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={`${pathPrefix}/quality`} activeClassName="active">
-                      Quality
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to={`${pathPrefix}/pricing`} activeClassName="active">
-                      Pricing
-                    </Link>
-                  </li>
-                  <li>
-                    <a href="https://blog.tunga.io" target="_blank">
-                      Blog
-                    </a>
-                  </li>
-                </ul>
+                        Schedule call
+                      </a>
+                    </li>
+                    <li className="launch">
+                      <Link className="primary" to="/start/">
+                        <i className="tunga-icon-rocket fa-lg" /> Start your
+                        project
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/signin" activeClassName="active">
+                        Login
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+                {Auth.isAuthenticated?null:(
+                  <ul className="nav navbar-nav navbar-left nav-main">
+                    <li>
+                      <Link
+                        to={`${pathPrefix}/our-story`}
+                        activeClassName="active">
+                        Our Story
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={`${pathPrefix}/quality`} activeClassName="active">
+                        Quality
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to={`${pathPrefix}/pricing`} activeClassName="active">
+                        Pricing
+                      </Link>
+                    </li>
+                    <li>
+                      <a href="https://blog.tunga.io" target="_blank">
+                        Blog
+                      </a>
+                    </li>
+                  </ul>
+                )}
               </div>
             </nav>
           </Affix>
@@ -165,3 +180,5 @@ ShowcaseContainer.defaultProps = {
   chatId: null,
   closeChat: false,
 };
+
+export default connect(ShowcaseContainer);

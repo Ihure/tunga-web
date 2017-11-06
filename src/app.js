@@ -66,7 +66,7 @@ import TaskForm from 'components/TaskForm';
 import EditTaskSectionForm from 'components/EditTaskSectionForm';
 import TaskDetailPage from 'routes/TaskDetailPage';
 import ApplicationForm from 'components/ApplicationForm';
-import TaskWorflow from 'components/TaskWorflow';
+import TaskWorkflow from 'components/TaskWorkflow';
 import ApplicationList from 'components/ApplicationList';
 import ApplicationDetail from 'components/ApplicationDetail';
 import MilestoneContainer from 'containers/MilestoneContainer';
@@ -123,6 +123,9 @@ import DeveloperProfile from 'components/DeveloperProfile';
 let all_routes = (
   <Route>
     <IndexRoute component={LandingPage} unauthedOnly={true} />
+    <Route path="agreement" component={Agreement} />
+    <Route path="privacy" component={PrivacyPolicy} />
+    <Route path="code-of-conduct" component={CodeOfConduct} />
     <Route unauthedOnly={true}>
       {/* No Auth Pages */}
       <Route path="welcome">
@@ -162,9 +165,6 @@ let all_routes = (
       <Route path="press" component={LandingPage} />
       <Route path="FAQ" component={LandingPage} />
       <Route path="press" component={LandingPage} />
-      <Route path="agreement" component={Agreement} />
-      <Route path="privacy" component={PrivacyPolicy} />
-      <Route path="code-of-conduct" component={CodeOfConduct} />
       <Route path="signin" component={SignInPage} />
       <Route path="signup">
         <IndexRedirect to="/signin" />
@@ -220,7 +220,7 @@ let all_routes = (
           <Route path="filter/:filter" component={TaskList} />
           <Route path="skill/:skill(/:filter)" component={TaskList} />
           <Route path=":taskId" component={TaskDetailPage}>
-            <IndexRoute component={TaskWorflow} />
+            <IndexRoute component={TaskWorkflow} />
             <Route path="edit" crumb="Edit">
               <IndexRoute component={TaskForm} />
               {/*<Route path="complete-task" component={EditTaskSectionForm} crumb="Finalize Task"/>*/}
